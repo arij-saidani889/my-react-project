@@ -1,64 +1,53 @@
-const stories = [
-  {
-  objectID: "4",
-  title: "Learning React is fun",
-  url: "https://react.dev/learn",
-  author: "Ali",
-  points: 200,
-  num_comments: 80,
-}
-  {
-    objectID: "1",
-    title: "React is amazing",
-    url: "https://react.dev",
-    author: "Arij",
-    points: 120,
-    num_comments: 45,
-  },
-  {
-    objectID: "2",
-    title: "Vite makes development faster",
-    url: "https://vitejs.dev",
-    author: "John",
-    points: 98,
-    num_comments: 30,
-  },
-  {
-    objectID: "3",
-    title: "JavaScript is powerful",
-    url: "https://developer.mozilla.org",
-    author: "Sara",
-    points: 150,
-    num_comments: 60,
-  },
-];
+import React from "react";
 
-function App() {
+// Header Component
+const Header = () => <h1>My Hacker News App</h1>;
+
+// Search Component
+const Search = () => {
+  // Event handler for input changes
+  const handleChange = (event) => {
+    console.log("Typed value:", event.target.value);
+    console.log("Input updated!");
+  };
+
   return (
     <div>
-      <h1>Hacker News Style Stories</h1>
-
-      {stories.map((story) => {
-        return (
-          <div key={story.objectID}>
-            <h3>
-              <a href={story.url} target="_blank" rel="noreferrer">
-                {story.title}
-              </a>
-            </h3>
-
-            <p>Author: {story.author}</p>
-
-            <span>Points: {story.points}</span>
-            <br />
-            <span>Comments: {story.num_comments}</span>
-
-            <hr />
-          </div>
-        );
-      })}
+      <input
+        type="text"
+        placeholder="Search..."
+        onChange={handleChange} // <-- Event handler here
+      />
     </div>
   );
-}
+};
+
+// List Component
+const List = ({ items }) => {
+  return (
+    <ul>
+      {items.map((item) => (
+        <li key={item.id}>{item.title}</li> // Arrow function inside map
+      ))}
+    </ul>
+  );
+};
+
+// App Component
+const App = () => {
+  const stories = [
+    { id: 1, title: "React 18 Released" },
+    { id: 2, title: "Vite + React = Fast!" },
+    { id: 3, title: "Arrow Functions in JS" },
+  ];
+
+  return (
+    <div>
+      <Header />
+      <Search />
+      <List items={stories} />
+    </div>
+  );
+};
 
 export default App;
