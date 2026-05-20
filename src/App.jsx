@@ -1,51 +1,63 @@
-// Week 5: Arrow Functions & Event Handlers
+// Week 6: Props, State & Filtering
+
+import { useState } from 'react';
 
 const App = () => {
+  // Step 1: Data moved inside App
   const stories = [
     { title: 'React', url: 'https://reactjs.org/', author: 'Jordan Walke', num_comments: 3, points: 4, objectID: 0 },
     { title: 'Redux', url: 'https://redux.js.org/', author: 'Dan Abramov', num_comments: 2, points: 5, objectID: 1 },
   ];
 
+  // Step 4: State for search term
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Step 5: Handler passed to Search
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  // Step 8: Filter stories based on searchTerm
+  const filteredStories = stories.filter((story) =>
+    story.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  console.log('App renders');
+
   return (
     <div>
       <Header title="My Hacker Stories" />
-      <Search />
-      <List list={stories} />
+      <Search onSearch={handleSearch} />
+      <List list={filteredStories} />
     </div>
   );
 };
 
 const Header = ({ title }) => <h1>{title}</h1>;
 
-const Search = () => {
-  // Step 5: Event handler using arrow function
-  const handleChange = (event) => {
-    // Step 6: Logging the full event object
-    console.log(event);
-
-    // Step 7: Log only the typed value + a second message
-    console.log(event.target.value);
-    console.log('User is typing...');
-  };
-
-  // Step 4: Block body used here because we have logic (handler) inside
+const Search = ({ onSearch }) => {
+  console.log('Search renders');
   return (
     <div>
       <label htmlFor="search">Search: </label>
-      <input id="search" type="text" onChange={handleChange} />
+      <input id="search" type="text" onChange={onSearch} />
     </div>
   );
 };
 
-// Step 3: Concise body arrow function inside map()
-const List = ({ list }) => (
-  <ul>
-    {list.map((item) => (
-      <Item key={item.objectID} item={item} />
-    ))}
-  </ul>
-);
+// Step 2: List receives stories via props
+const List = ({ list }) => {
+  console.log('List renders');
+  return (
+    <ul>
+      {list.map((item) => (
+        <Item key={item.objectID} item={item} />
+      ))}
+    </ul>
+  );
+};
 
+// Step 3: Item is its own component
 const Item = ({ item }) => (
   <li>
     <a href={item.url}>{item.title}</a> — {item.author}
@@ -53,10 +65,10 @@ const Item = ({ item }) => (
 );
 
 /*
-  Step 8 – Reflection:
-  1. Concise body arrow functions: used when the function only returns a single expression (no logic needed).
-  2. Block body arrow functions: used when we need to add logic, like event handlers or variables.
-  3. The event object contains info about the browser event: target element, value typed, key pressed, etc.
+  Step 10 – Reflection:
+  1. Props are read-only data passed from parent to child. State is data owned by a component that can change over time.
+  2. We lift state up so a parent can share data with multiple children.
+  3. Filtering logic should live in App, since it owns both the data and the search term.
 */
 
 export default App;
